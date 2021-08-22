@@ -4,38 +4,11 @@
   
     
     <entry>
-      <title>Hello World</title>
-      <link href="/2021/08/19/hello-world/"/>
-      <url>/2021/08/19/hello-world/</url>
+      <title>python爬虫爬取前程无忧网岗位信息</title>
+      <link href="/2021/08/19/pc-qcwy/"/>
+      <url>/2021/08/19/pc-qcwy/</url>
       
-        <content type="html"><![CDATA[<h1 id="1212"><a href="#1212" class="headerlink" title="1212"></a>1212</h1><h4 id="111"><a href="#111" class="headerlink" title="111"></a>111</h4>]]></content>
-      
-      
-      <categories>
-          
-          <category> python </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> c++ </tag>
-            
-            <tag> sql </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>测试</title>
-      <link href="/2021/08/19/tese/"/>
-      <url>/2021/08/19/tese/</url>
-      
-        <content type="html"><![CDATA[<h1 id="1212"><a href="#1212" class="headerlink" title="1212"></a>1212</h1><h4 id="111"><a href="#111" class="headerlink" title="111"></a>111</h4>]]></content>
+        <content type="html"><![CDATA[<h1 id="python爬虫爬取前程无忧网指定岗位信息"><a href="#python爬虫爬取前程无忧网指定岗位信息" class="headerlink" title="python爬虫爬取前程无忧网指定岗位信息"></a>python爬虫爬取前程无忧网指定岗位信息</h1><p><strong>客套话就不多说了，直接正题</strong></p><pre class="line-numbers language-python" data-language="python"><code class="language-python">#第一步引入相关第三方依赖,如果没有安装则要提前安装import requestsfrom lxml import etreeimport xlwt  import reimport astimport urllib.parse<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token comment">//第一步引入相关第三方依赖,如果没有安装则要提前安装</span><span class="token keyword">import</span> requestsfrom lxml <span class="token keyword">import</span> etree<span class="token keyword">let</span> i<span class="token operator">=</span><span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
       
       
       <categories>
