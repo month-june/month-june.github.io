@@ -1,5 +1,8 @@
 <!DOCTYPE HTML>
 <html lang="zh-CN">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_1.css" >
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zyoushuo/Blog@latest/hexo/css/loading_style_2.css" >
+
 
 
 <head>
@@ -45,7 +48,36 @@
 
 
 <body>
-    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header class="navbar-fixed">
+    
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id='loader'>
+    
+    <div class="loading-left-bg"></div>
+      <div class="loading-right-bg"></div>
+      <div class="spinner-box">
+      <div class="configure-border-1">
+        <div class="configure-core"></div>
+      </div>
+      <div class="configure-border-2">
+        <div class="configure-core"></div>
+      </div>
+      <div class="loading-word">加载中...</div>
+    </div>
+    
+  </div>
+  
+  <script>
+    var endLoading = function () {
+      document.body.style.overflow = 'auto';
+      document.getElementById('loader').classList.add("loading");
+    }
+    window.addEventListener('load',endLoading);
+  </script>
+  
+
+
+  
+
+    <header class="navbar-fixed">
     <nav id="headNav" class="bg-color nav-transparent">
         <div id="navContainer" class="nav-wrapper container">
             <div class="brand-logo">
