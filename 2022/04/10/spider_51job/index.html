@@ -498,7 +498,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-24
+                    2022-04-10
                 </div>
                 
 
@@ -507,7 +507,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    911
+                    948
                 </div>
                 
 
@@ -527,7 +527,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="网页分析"><a href="#网页分析" class="headerlink" title="网页分析"></a>网页分析</h2><p>爬虫爬取数据首先要解析网页，要知道数据存放的地方，是直接写在dom节点中，还是写在script标签中又或者是通过JavaScript文件来获取并加载数据。<br>在前程无忧网<a target="_blank" rel="noopener" href="https://www.51job.com/">https://www.51job.com</a>中搜索职位前端，ctrl+u进入网页源码，可以发现在dom节点中是找不到相关数据的，在源码中ctrl+f随便搜索看到的一家公司名字，如下图所示：<br><img src="https://img-blog.csdnimg.cn/3e3c8823265e4508af7f102e54e8f8f2.png"><br><img src="https://img-blog.csdnimg.cn/cd4d03d4ad814423938219a1429c276d.jpg"></p>
+                <h2 id="网页分析"><a href="#网页分析" class="headerlink" title="网页分析"></a>网页分析</h2><p>爬虫爬取数据首先要解析网页，要知道数据存放的地方，是直接写在dom节点中，还是写在script标签中又或者是通过JavaScript文件来获取并加载数据。<br>在前程无忧网<a target="_blank" rel="noopener" href="https://www.51job.com/">https://www.51job.com</a>中搜索职位前端，ctrl+u进入网页源码，可以发现在dom节点中是找不到相关数据的，在源码中ctrl+f随便搜索看到的一家公司名字，如下图所示：<br><img src="https://img-blog.csdnimg.cn/578cb9a254184fc892302190bb05cdef.png"><br><img src="https://img-blog.csdnimg.cn/363fe6383afe4914be41b180a5e3e094.png"></p>
 <p>可以发现数据全部存放在该源码中的一个<code>&lt;script type=&quot;text/javascript&quot;&gt;&lt;script&gt;</code>标签中，而非硬编码直接写在dom节点中，要获取数据也就是要获取到这个script标签，好了，网页分析就到这里，接下来直接上代码。</p>
 <h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment"># 引入相关第三方依赖，如果没有安装则要提前安装</span>
 <span class="token keyword">import</span> requests
@@ -540,8 +540,10 @@
 <span class="token comment"># 设置请求头</span>
 headers<span class="token operator">=</span><span class="token punctuation">&#123;</span>
 <span class="token string">'Upgrade-Insecure-Requests'</span><span class="token punctuation">:</span><span class="token string">'1'</span><span class="token punctuation">,</span>
-<span class="token string">'User-Agent'</span><span class="token punctuation">:</span><span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.57'</span>
+<span class="token string">'User-Agent'</span><span class="token punctuation">:</span><span class="token string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.57'</span><span class="token punctuation">,</span>
+<span class="token string">'cookie'</span><span class="token punctuation">:</span><span class="token string">'acw_tc=2f624a2f16495828649574713e7ab28d88a4bf876df38cf588df9f39718913'</span>
 <span class="token punctuation">&#125;</span>
+<span class="token comment">#上面请求头所带的cookie如果过期了，就需要重新重浏览器上获取然后跟换代码中的cookie值</span>
 
 <span class="token comment"># 输入岗位名称并转urlencode编码</span>
 job<span class="token operator">=</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">'请输入您要在前程无忧网爬取的岗位名称：'</span><span class="token punctuation">)</span>
@@ -578,61 +580,61 @@ sheet1 <span class="token operator">=</span> workbook<span class="token punctuat
 
 <span class="token comment">#获取数据并写入sheet1</span>
 <span class="token keyword">def</span> <span class="token function">get_write_data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    sheet1_row <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">'请输入要爬取&#123;&#125;岗位的页数：'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        url <span class="token operator">=</span> <span class="token string">'https://search.51job.com/list/000000,000000,0000,00,9,99,&#123;&#125;,2,&#123;&#125;.html?lang=c&amp;postchannel=0000&amp;workyear=99&amp;cotype=99&amp;degreefrom=99&amp;jobterm=99&amp;companysize=99&amp;ord_field=0&amp;dibiaoid=0&amp;line=&amp;welfare='</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>job_urlencode<span class="token punctuation">,</span> i<span class="token punctuation">)</span>
-        <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'第&#123;&#125;页的链接是：&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> url<span class="token punctuation">)</span><span class="token punctuation">)</span>
-        response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>  <span class="token comment">#对url发起请求,获取Response对象</span>
-        response<span class="token punctuation">.</span>encoding <span class="token operator">=</span> <span class="token string">'gbk'</span>  <span class="token comment">#设置编码格式是gbk</span>
+  sheet1_row <span class="token operator">=</span> <span class="token number">0</span>
+  <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span><span class="token builtin">input</span><span class="token punctuation">(</span><span class="token string">'请输入要爬取&#123;&#125;岗位的页数：'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    url <span class="token operator">=</span> <span class="token string">'https://search.51job.com/list/000000,000000,0000,00,9,99,&#123;&#125;,2,&#123;&#125;.html?lang=c&amp;postchannel=0000&amp;workyear=99&amp;cotype=99&amp;degreefrom=99&amp;jobterm=99&amp;companysize=99&amp;ord_field=0&amp;dibiaoid=0&amp;line=&amp;welfare='</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>job_urlencode<span class="token punctuation">,</span> i<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'第&#123;&#125;页的链接是：&#123;&#125;'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>i<span class="token punctuation">,</span> url<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    response <span class="token operator">=</span> requests<span class="token punctuation">.</span>get<span class="token punctuation">(</span>url<span class="token punctuation">,</span> headers<span class="token operator">=</span>headers<span class="token punctuation">)</span>  <span class="token comment">#对url发起请求,获取Response对象</span>
+    response<span class="token punctuation">.</span>encoding <span class="token operator">=</span> <span class="token string">'gbk'</span>  <span class="token comment">#设置编码格式是gbk</span>
 
-        html_51job <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span>  <span class="token comment">#解析获取到HTML</span>
-        job_script <span class="token operator">=</span> html_51job<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'//script[@type="text/javascript"]'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>text  <span class="token comment"># 获取存放数据的javascript</span>
-        job_script <span class="token operator">=</span> re<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">'"engine_search_result":(.*"adid":""&#125;])'</span><span class="token punctuation">,</span> job_script<span class="token punctuation">)</span>  <span class="token comment"># 正则表达式提取数据</span>
-        job_text <span class="token operator">=</span> job_script<span class="token punctuation">.</span>group<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># 得到字符串形式的数据</span>
-        job_details <span class="token operator">=</span> ast<span class="token punctuation">.</span>literal_eval<span class="token punctuation">(</span>job_text<span class="token punctuation">)</span>  <span class="token comment"># 将字符串转为列表</span>
-        
-        <span class="token comment"># 将数据循环写入sheet1</span>
-        <span class="token keyword">for</span> job_details_dict <span class="token keyword">in</span> job_details<span class="token punctuation">:</span>
-            <span class="token keyword">try</span><span class="token punctuation">:</span>
-                job_name <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'job_name'</span><span class="token punctuation">]</span>  <span class="token comment"># 职位名称</span>
-                company_name <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'company_name'</span><span class="token punctuation">]</span>  <span class="token comment"># 公司名字</span>
-                wages <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'providesalary_text'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 工资</span>
-                address <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'workarea_text'</span><span class="token punctuation">]</span>  <span class="token comment"># 地址</span>
-                updatedate <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'updatedate'</span><span class="token punctuation">]</span>  <span class="token comment"># 发布日期</span>
-                companytype <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'companytype_text'</span><span class="token punctuation">]</span>  <span class="token comment"># 公司性质</span>
-                jobwelf <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'jobwelf'</span><span class="token punctuation">]</span>  <span class="token comment"># 职位福利</span>
-                company_status <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'companyind_text'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 行业)</span>
-                companysize <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'companysize_text'</span><span class="token punctuation">]</span>  <span class="token comment"># 公司规模</span>
-                job_href <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'job_href'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 投递链接</span>
-                company_href <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'company_href'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 公司链接</span>
+    html_51job <span class="token operator">=</span> etree<span class="token punctuation">.</span>HTML<span class="token punctuation">(</span>response<span class="token punctuation">.</span>text<span class="token punctuation">)</span>  <span class="token comment">#解析获取到HTML</span>
+    job_script <span class="token operator">=</span> html_51job<span class="token punctuation">.</span>xpath<span class="token punctuation">(</span><span class="token string">'//script[@type="text/javascript"]'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span><span class="token punctuation">.</span>text  <span class="token comment"># 获取存放数据的javascript</span>
+    job_script <span class="token operator">=</span> re<span class="token punctuation">.</span>findall<span class="token punctuation">(</span><span class="token string">'"engine_jds":(.*),"jobid_count"'</span><span class="token punctuation">,</span> job_script<span class="token punctuation">)</span>  <span class="token comment"># 正则表达式提取数据</span>
+    job_text <span class="token operator">=</span> job_script<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># 得到字符串形式的数据</span>
+    job_details <span class="token operator">=</span> ast<span class="token punctuation">.</span>literal_eval<span class="token punctuation">(</span>job_text<span class="token punctuation">)</span>  <span class="token comment"># 将字符串转为列表</span>
+    
+    <span class="token comment"># 将数据循环写入sheet1</span>
+    <span class="token keyword">for</span> job_details_dict <span class="token keyword">in</span> job_details<span class="token punctuation">:</span>
+      <span class="token keyword">try</span><span class="token punctuation">:</span>
+        job_name <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'job_name'</span><span class="token punctuation">]</span>  <span class="token comment"># 职位名称</span>
+        company_name <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'company_name'</span><span class="token punctuation">]</span>  <span class="token comment"># 公司名字</span>
+        wages <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'providesalary_text'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 工资</span>
+        address <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'workarea_text'</span><span class="token punctuation">]</span>  <span class="token comment"># 地址</span>
+        updatedate <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'updatedate'</span><span class="token punctuation">]</span>  <span class="token comment"># 发布日期</span>
+        companytype <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'companytype_text'</span><span class="token punctuation">]</span>  <span class="token comment"># 公司性质</span>
+        jobwelf <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'jobwelf'</span><span class="token punctuation">]</span>  <span class="token comment"># 职位福利</span>
+        company_status <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'companyind_text'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 行业)</span>
+        companysize <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'companysize_text'</span><span class="token punctuation">]</span>  <span class="token comment"># 公司规模</span>
+        job_href <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'job_href'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 投递链接</span>
+        company_href <span class="token operator">=</span> job_details_dict<span class="token punctuation">[</span><span class="token string">'company_href'</span><span class="token punctuation">]</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">'\\'</span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span>  <span class="token comment"># 公司链接</span>
 
-                sheet1_row <span class="token operator">=</span> sheet1_row <span class="token operator">+</span> <span class="token number">1</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> job_name<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> company_name<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> wages<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> address<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> updatedate<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> companytype<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> jobwelf<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> company_status<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> companysize<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> job_href<span class="token punctuation">)</span>
-                sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> company_href<span class="token punctuation">)</span>
+        sheet1_row <span class="token operator">=</span> sheet1_row <span class="token operator">+</span> <span class="token number">1</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> job_name<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> company_name<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> wages<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> address<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> updatedate<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">5</span><span class="token punctuation">,</span> companytype<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> jobwelf<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">7</span><span class="token punctuation">,</span> company_status<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> companysize<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> job_href<span class="token punctuation">)</span>
+        sheet1<span class="token punctuation">.</span>write<span class="token punctuation">(</span>sheet1_row<span class="token punctuation">,</span> <span class="token number">10</span><span class="token punctuation">,</span> company_href<span class="token punctuation">)</span>
 
-            <span class="token keyword">except</span><span class="token punctuation">:</span>
-                <span class="token string">''</span>
+      <span class="token keyword">except</span><span class="token punctuation">:</span>
+        <span class="token string">''</span>
 
 <span class="token keyword">def</span> <span class="token function">spider_51job</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    ceate_sheet<span class="token punctuation">(</span><span class="token punctuation">)</span>
-    get_write_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  ceate_sheet<span class="token punctuation">(</span><span class="token punctuation">)</span>
+  get_write_data<span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-    <span class="token comment">#保存excel到该python文件的同一目录下</span>
-    workbook<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'前程无忧网&#123;&#125;岗位.xls'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span><span class="token punctuation">)</span>
+  <span class="token comment">#保存excel到该python文件的同一目录下</span>
+  workbook<span class="token punctuation">.</span>save<span class="token punctuation">(</span><span class="token string">'前程无忧网&#123;&#125;岗位.xls'</span><span class="token punctuation">.</span><span class="token builtin">format</span><span class="token punctuation">(</span>job<span class="token punctuation">)</span><span class="token punctuation">)</span>
 
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'爬取成功'</span><span class="token punctuation">)</span>
-    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'------------------------------------------------------'</span><span class="token punctuation">)</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'爬取成功'</span><span class="token punctuation">)</span>
+  <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'------------------------------------------------------'</span><span class="token punctuation">)</span>
 
-spider_51job<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+spider_51job<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h2><p>爬取结果部分截图如下：</p>
 <p><img src="https://img-blog.csdnimg.cn/1f95709ac44f41589c825c16c99a4ba7.jpg"></p>
 
@@ -661,7 +663,7 @@ spider_51job<span class="token punctuation">(</span><span class="token punctuati
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://liubofeng.com/2021/08/24/spider_51job/">http://liubofeng.com/2021/08/24/spider_51job/</a>
+                    <a href="http://liubofeng.com/2022/04/10/spider_51job/">http://liubofeng.com/2022/04/10/spider_51job/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -920,67 +922,12 @@ spider_51job<span class="token punctuation">(</span><span class="token punctuati
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
-            <div class="card">
-                <a href="/2021/08/25/spider_sxs/">
-                    <div class="card-image">
-                        
-                        <img src="https://z3.ax1x.com/2021/09/07/hTNr8S.jpg" class="responsive-img" alt="python爬虫爬取实习僧岗位信息并存入excel数据表中">
-                        
-                        <span class="card-title">python爬虫爬取实习僧岗位信息并存入excel数据表中</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-25
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/python/" class="post-category">
-                                    python
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/python/">
-                        <span class="chip bg-color">python</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%88%AC%E8%99%AB/">
-                        <span class="chip bg-color">爬虫</span>
-                    </a>
-                    
-                    <a href="/tags/%E5%AD%97%E4%BD%93%E5%8F%8D%E7%88%AC/">
-                        <span class="chip bg-color">字体反爬</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2021/08/24/spider_51job/">
+                <a href="/2022/04/10/spider_51job/">
                     <div class="card-image">
                         
                         <img src="https://z3.ax1x.com/2021/09/07/hTNHKJ.jpg" class="responsive-img" alt="python爬虫爬取前程无忧网岗位信息并存入excel数据表中">
@@ -996,7 +943,7 @@ spider_51job<span class="token punctuation">(</span><span class="token punctuati
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-24
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-04-10
                             </span>
                         <span class="publish-author">
                             
@@ -1020,6 +967,58 @@ spider_51job<span class="token punctuation">(</span><span class="token punctuati
                     
                     <a href="/tags/%E7%88%AC%E8%99%AB/">
                         <span class="chip bg-color">爬虫</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2021/09/07/swiper-plug/">
+                    <div class="card-image">
+                        
+                        <img src="https://z3.ax1x.com/2021/09/07/hTNuH1.jpg" class="responsive-img" alt="前端插件swiper的基础使用">
+                        
+                        <span class="card-title">前端插件swiper的基础使用</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E5%89%8D%E7%AB%AF/" class="post-category">
+                                    前端
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%89%8D%E7%AB%AF/">
+                        <span class="chip bg-color">前端</span>
+                    </a>
+                    
+                    <a href="/tags/swiper%E6%8F%92%E4%BB%B6/">
+                        <span class="chip bg-color">swiper插件</span>
                     </a>
                     
                 </div>
